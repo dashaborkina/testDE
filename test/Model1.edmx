@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище optbazaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="category" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="iduser" Type="int" Nullable="false" />
+          <Property Name="kolvo" Type="int" Nullable="false" />
+          <Property Name="idtovar" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="postavshiki">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="adress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="category" Type="int" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tovar">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="kolvo" Type="int" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="idcategory" Type="int" />
+          <Property Name="idpostavshik" Type="int" Nullable="false" />
+          <Property Name="edizmer" Type="nchar" MaxLength="10" />
+          <Property Name="dopinfo" Type="varchar" MaxLength="50" />
+          <Property Name="photo" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="organization" Type="nvarchar" MaxLength="50" />
+          <Property Name="adress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="idrole" Type="int" Nullable="false" />
+          <Property Name="login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_order_tovar">
+          <End Role="tovar" Type="Self.tovar" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tovar">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idtovar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="iduser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_postavshiki_category">
+          <End Role="category" Type="Self.category" Multiplicity="0..1" />
+          <End Role="postavshiki" Type="Self.postavshiki" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="postavshiki">
+              <PropertyRef Name="category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tovar_category">
+          <End Role="category" Type="Self.category" Multiplicity="0..1" />
+          <End Role="tovar" Type="Self.tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tovar">
+              <PropertyRef Name="idcategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tovar_postavshiki">
+          <End Role="postavshiki" Type="Self.postavshiki" Multiplicity="1" />
+          <End Role="tovar" Type="Self.tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="postavshiki">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tovar">
+              <PropertyRef Name="idpostavshik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_roles">
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idrole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище optbazaModelContainer">
+          <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="postavshiki" EntityType="Self.postavshiki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tovar" EntityType="Self.tovar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_order_tovar" Association="Self.FK_order_tovar">
+            <End Role="tovar" EntitySet="tovar" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_user" Association="Self.FK_order_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_postavshiki_category" Association="Self.FK_postavshiki_category">
+            <End Role="category" EntitySet="category" />
+            <End Role="postavshiki" EntitySet="postavshiki" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tovar_category" Association="Self.FK_tovar_category">
+            <End Role="category" EntitySet="category" />
+            <End Role="tovar" EntitySet="tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tovar_postavshiki" Association="Self.FK_tovar_postavshiki">
+            <End Role="postavshiki" EntitySet="postavshiki" />
+            <End Role="tovar" EntitySet="tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_roles" Association="Self.FK_user_roles">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="optbazaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="category1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="postavshiki" Relationship="Self.FK_postavshiki_category" FromRole="category" ToRole="postavshiki" />
+          <NavigationProperty Name="tovar" Relationship="Self.FK_tovar_category" FromRole="category" ToRole="tovar" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="iduser" Type="Int32" Nullable="false" />
+          <Property Name="kolvo" Type="Int32" Nullable="false" />
+          <Property Name="idtovar" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tovar" Relationship="Self.FK_order_tovar" FromRole="order" ToRole="tovar" />
+          <NavigationProperty Name="user" Relationship="Self.FK_order_user" FromRole="order" ToRole="user" />
+        </EntityType>
+        <EntityType Name="postavshiki">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="category" Type="Int32" />
+          <NavigationProperty Name="category1" Relationship="Self.FK_postavshiki_category" FromRole="postavshiki" ToRole="category" />
+          <NavigationProperty Name="tovar" Relationship="Self.FK_tovar_postavshiki" FromRole="postavshiki" ToRole="tovar" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK_user_roles" FromRole="roles" ToRole="user" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tovar">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="kolvo" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="idcategory" Type="Int32" />
+          <Property Name="idpostavshik" Type="Int32" Nullable="false" />
+          <Property Name="edizmer" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="dopinfo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="photo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="category" Relationship="Self.FK_tovar_category" FromRole="tovar" ToRole="category" />
+          <NavigationProperty Name="order" Relationship="Self.FK_order_tovar" FromRole="tovar" ToRole="order" />
+          <NavigationProperty Name="postavshiki" Relationship="Self.FK_tovar_postavshiki" FromRole="tovar" ToRole="postavshiki" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="organization" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idrole" Type="Int32" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="order" Relationship="Self.FK_order_user" FromRole="user" ToRole="order" />
+          <NavigationProperty Name="roles" Relationship="Self.FK_user_roles" FromRole="user" ToRole="roles" />
+        </EntityType>
+        <Association Name="FK_postavshiki_category">
+          <End Role="category" Type="Self.category" Multiplicity="0..1" />
+          <End Role="postavshiki" Type="Self.postavshiki" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="postavshiki">
+              <PropertyRef Name="category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tovar_category">
+          <End Role="category" Type="Self.category" Multiplicity="0..1" />
+          <End Role="tovar" Type="Self.tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tovar">
+              <PropertyRef Name="idcategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_tovar">
+          <End Role="tovar" Type="Self.tovar" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tovar">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="idtovar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="iduser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tovar_postavshiki">
+          <End Role="postavshiki" Type="Self.postavshiki" Multiplicity="1" />
+          <End Role="tovar" Type="Self.tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="postavshiki">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tovar">
+              <PropertyRef Name="idpostavshik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_roles">
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idrole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="optbazaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="category" EntityType="Self.category" />
+          <EntitySet Name="order" EntityType="Self.order" />
+          <EntitySet Name="postavshiki" EntityType="Self.postavshiki" />
+          <EntitySet Name="roles" EntityType="Self.roles" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="tovar" EntityType="Self.tovar" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <AssociationSet Name="FK_postavshiki_category" Association="Self.FK_postavshiki_category">
+            <End Role="category" EntitySet="category" />
+            <End Role="postavshiki" EntitySet="postavshiki" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tovar_category" Association="Self.FK_tovar_category">
+            <End Role="category" EntitySet="category" />
+            <End Role="tovar" EntitySet="tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_tovar" Association="Self.FK_order_tovar">
+            <End Role="tovar" EntitySet="tovar" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_user" Association="Self.FK_order_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tovar_postavshiki" Association="Self.FK_tovar_postavshiki">
+            <End Role="postavshiki" EntitySet="postavshiki" />
+            <End Role="tovar" EntitySet="tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_roles" Association="Self.FK_user_roles">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище optbazaModelContainer" CdmEntityContainer="optbazaEntities">
+          <EntitySetMapping Name="category">
+            <EntityTypeMapping TypeName="optbazaModel.category">
+              <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="category1" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order">
+            <EntityTypeMapping TypeName="optbazaModel.order">
+              <MappingFragment StoreEntitySet="order">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="iduser" ColumnName="iduser" />
+                <ScalarProperty Name="kolvo" ColumnName="kolvo" />
+                <ScalarProperty Name="idtovar" ColumnName="idtovar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="postavshiki">
+            <EntityTypeMapping TypeName="optbazaModel.postavshiki">
+              <MappingFragment StoreEntitySet="postavshiki">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="category" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="optbazaModel.roles">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="optbazaModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tovar">
+            <EntityTypeMapping TypeName="optbazaModel.tovar">
+              <MappingFragment StoreEntitySet="tovar">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="kolvo" ColumnName="kolvo" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="idcategory" ColumnName="idcategory" />
+                <ScalarProperty Name="idpostavshik" ColumnName="idpostavshik" />
+                <ScalarProperty Name="edizmer" ColumnName="edizmer" />
+                <ScalarProperty Name="dopinfo" ColumnName="dopinfo" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="optbazaModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="organization" ColumnName="organization" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="idrole" ColumnName="idrole" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
